@@ -1,0 +1,111 @@
+// Interfaz para los comportamientos de ataque
+interface AttackBehavior {
+    void attack();
+}
+
+// Implementaciones concretas de comportamientos de ataque
+class MeleeAttack implements AttackBehavior {
+    public void attack() {
+        System.out.println("Realizando ataque cuerpo a cuerpo");
+    }
+}
+
+class RangedAttack implements AttackBehavior {
+    public void attack() {
+        System.out.println("Realizando ataque a distancia");
+    }
+}
+
+// Interfaz para los comportamientos de movimiento
+interface MoveBehavior {
+    void move();
+}
+
+// Implementaciones concretas de comportamientos de movimiento
+class Walk implements MoveBehavior {
+    public void move() {
+        System.out.println("Caminando");
+    }
+}
+
+class Ride implements MoveBehavior {
+    public void move() {
+        System.out.println("Cabalgando");
+    }
+}
+
+// Clase principal de las unidades militares
+abstract class MilitaryUnit {
+    AttackBehavior attackBehavior;
+    MoveBehavior moveBehavior;
+
+    public MilitaryUnit(AttackBehavior attackBehavior, MoveBehavior moveBehavior) {
+        this.attackBehavior = attackBehavior;
+        this.moveBehavior = moveBehavior;
+    }
+
+    public void attack() {
+        attackBehavior.attack();
+    }
+
+    public void move() {
+        moveBehavior.move();
+    }
+
+    public abstract void display();
+}
+
+// Implementaciones concretas de unidades militares
+class Soldier extends MilitaryUnit {
+    public Soldier() {
+        super(new MeleeAttack(), new Walk());
+    }
+
+    public void display() {
+        System.out.println("Soldado");
+    }
+}
+
+class Archer extends MilitaryUnit {
+    public Archer() {
+        super(new RangedAttack(), new Walk());
+    }
+
+    public void display() {
+        System.out.println("Arquero");
+    }
+}
+
+class Knight extends MilitaryUnit {
+    public Knight() {
+        super(new MeleeAttack(), new Ride());
+    }
+
+    public void display() {
+        System.out.println("Caballero");
+    }
+}
+
+// Clase de ejemplo que usa el patrón Strategy
+public class Main {
+    public static void main(String[] args) {
+        MilitaryUnit soldier = new Soldier();
+        MilitaryUnit archer = new Archer();
+        MilitaryUnit knight = new Knight();
+
+        System.out.println("Soldado:");
+        soldier.display();
+        soldier.attack();
+        soldier.move();
+
+        System.out.println("\nArquero:");
+        archer.display();
+        archer.attack();
+        archer.move();
+
+        System.out.println("\nCaballero:");
+        knight.display();
+        knight.attack();
+        knight.move();
+    }
+}
