@@ -1,111 +1,60 @@
-// Interfaz para los comportamientos de ataque
+// Interfaz para el comportamiento de ataque
 interface AttackBehavior {
     void attack();
 }
 
-// Implementaciones concretas de comportamientos de ataque
-class MeleeAttack implements AttackBehavior {
+// Implementaciones concretas del comportamiento de ataque
+class SwordAttack implements AttackBehavior {
     public void attack() {
-        System.out.println("Realizando ataque cuerpo a cuerpo");
+        System.out.println("¡Ataque con espada!");
     }
 }
 
-class RangedAttack implements AttackBehavior {
+class BowAttack implements AttackBehavior {
     public void attack() {
-        System.out.println("Realizando ataque a distancia");
+        System.out.println("¡Ataque con arco!");
     }
 }
 
-// Interfaz para los comportamientos de movimiento
-interface MoveBehavior {
-    void move();
-}
-
-// Implementaciones concretas de comportamientos de movimiento
-class Walk implements MoveBehavior {
-    public void move() {
-        System.out.println("Caminando");
+class LanceAttack implements AttackBehavior {
+    public void attack() {
+        System.out.println("¡Ataque con lanza!");
     }
 }
 
-class Ride implements MoveBehavior {
-    public void move() {
-        System.out.println("Cabalgando");
-    }
-}
+// Clase principal de la unidad militar
+class Unit {
+    private AttackBehavior attackBehavior;
 
-// Clase principal de las unidades militares
-abstract class MilitaryUnit {
-    AttackBehavior attackBehavior;
-    MoveBehavior moveBehavior;
-
-    public MilitaryUnit(AttackBehavior attackBehavior, MoveBehavior moveBehavior) {
+    public Unit(AttackBehavior attackBehavior) {
         this.attackBehavior = attackBehavior;
-        this.moveBehavior = moveBehavior;
     }
 
-    public void attack() {
+    public void setAttackBehavior(AttackBehavior attackBehavior) {
+        this.attackBehavior = attackBehavior;
+    }
+
+    public void performAttack() {
         attackBehavior.attack();
     }
-
-    public void move() {
-        moveBehavior.move();
-    }
-
-    public abstract void display();
 }
 
-// Implementaciones concretas de unidades militares
-class Soldier extends MilitaryUnit {
-    public Soldier() {
-        super(new MeleeAttack(), new Walk());
-    }
-
-    public void display() {
-        System.out.println("Soldado");
-    }
-}
-
-class Archer extends MilitaryUnit {
-    public Archer() {
-        super(new RangedAttack(), new Walk());
-    }
-
-    public void display() {
-        System.out.println("Arquero");
-    }
-}
-
-class Knight extends MilitaryUnit {
-    public Knight() {
-        super(new MeleeAttack(), new Ride());
-    }
-
-    public void display() {
-        System.out.println("Caballero");
-    }
-}
-
-// Clase de ejemplo que usa el patrón Strategy
-public class Main {
+// Clase principal del juego
+public class StrategyPatternExample {
     public static void main(String[] args) {
-        MilitaryUnit soldier = new Soldier();
-        MilitaryUnit archer = new Archer();
-        MilitaryUnit knight = new Knight();
+        // Crear diferentes tipos de unidades con diferentes comportamientos de ataque
+        Unit soldier = new Unit(new SwordAttack());
+        Unit archer = new Unit(new BowAttack());
+        Unit knight = new Unit(new LanceAttack());
 
-        System.out.println("Soldado:");
-        soldier.display();
-        soldier.attack();
-        soldier.move();
+        // Realizar ataques
+        soldier.performAttack(); // Ataque con espada
+        archer.performAttack(); // Ataque con arco
+        knight.performAttack(); // Ataque con lanza
 
-        System.out.println("\nArquero:");
-        archer.display();
-        archer.attack();
-        archer.move();
-
-        System.out.println("\nCaballero:");
-        knight.display();
-        knight.attack();
-        knight.move();
+        // Cambiar el comportamiento de ataque en tiempo de ejecución
+        soldier.setAttackBehavior(new BowAttack());
+        soldier.performAttack(); // Ahora realiza un ataque con arco
     }
 }
+
